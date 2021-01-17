@@ -8,6 +8,7 @@ import 'package:spotadate/models/home_images_model.dart';
 import 'package:spotadate/models/spot_filter.dart';
 import 'package:spotadate/utils/colors.dart';
 
+import '../home_page.dart';
 import 'nav_home_page.dart';
 
 class NavBookmarksPage extends StatefulWidget {
@@ -41,29 +42,38 @@ class _NavBookmarksPageState extends State<NavBookmarksPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar:buildAppBar() ,
-      body:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // spot list(viewpager)
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+        ); // Action to perform on back pressed
+        return false;
+      },
+      child: Scaffold(
+        appBar:buildAppBar() ,
+        body:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // spot list(viewpager)
 
-              Expanded(
-                //flex: 6,
-                child: buildSpotListview(),
-              ),
+                Expanded(
+                  //flex: 6,
+                  child: buildSpotListview(),
+                ),
 
-              // spot image list
-              Container(
-                height: 100,
-                //flex: 1,
-                child:buildSpotImageListView(),
-              ),
-            ],
-          ),
+                // spot image list
+                Container(
+                  height: 100,
+                  //flex: 1,
+                  child:buildSpotImageListView(),
+                ),
+              ],
+            ),
 
-      );
+        ),
+    );
 
   }
 
@@ -392,7 +402,7 @@ class _NavBookmarksPageState extends State<NavBookmarksPage> {
               print("List image selected $index");
               setState(() {
                 currentSpotIndex = index;
-                spotPageController.animateToPage(index, duration: Duration(milliseconds: 1), curve: Curves.fastOutSlowIn);
+                spotPageController.animateToPage(index, duration: Duration(milliseconds: 1000), curve: Curves.fastOutSlowIn);
               });
             },
             child: Container(

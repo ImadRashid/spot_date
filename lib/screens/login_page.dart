@@ -45,13 +45,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      body: buildBody(),
-      // signup button
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 30),
-        child: buildSignupBtn(),
-      ),
+        key: _scaffoldKey,
+        body: buildBody(),
+        // signup button
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(bottom: 30),
+          child: buildSignupBtn(),
+        ),
+
     );
   }
 

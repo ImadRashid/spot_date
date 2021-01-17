@@ -10,11 +10,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotadate/screens/login_page.dart';
 import 'package:spotadate/utils/colors.dart';
 
 class CancleDateDialog {
 
-  CancleDateDialog({this.context, this.onDismiss});
+  CancleDateDialog({this.context,this.msg, this.onDismiss});
+
+  String msg;
 
   Function onDismiss;
 
@@ -51,10 +54,10 @@ class CancleDateDialog {
         Expanded(
           child: MaterialButton(
             onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => SpotVerificationPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LoginPage()));
             },
             color: orangeColor,
             elevation: 0,
@@ -76,7 +79,7 @@ class CancleDateDialog {
           child: MaterialButton(
             onPressed: ()
             {
-
+                Navigator.pop(context);
             },
             // isVerifyBtnEnabled? () {
             //   setState(() {
@@ -132,7 +135,7 @@ class CancleDateDialog {
         ),
         Expanded(
           child: Text(
-            " Are you sure you want to cancle the date?",
+            "$msg",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),

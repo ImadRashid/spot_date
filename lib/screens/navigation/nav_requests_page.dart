@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // import 'package:spotadate/screens/spot_zone_request_page.dart';
 import 'package:spotadate/utils/colors.dart';
 
+import '../home_page.dart';
 import '../spot_requests_page.dart';
 
 class NavRequestsPage extends StatefulWidget {
@@ -28,12 +29,21 @@ class _NavRequestsPageState extends State<NavRequestsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: new Scaffold(
-        key: _scaffoldKey,
-        appBar: buildAppBar(),
-        body: buildBody(),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+        ); // Action to perform on back pressed
+        return false;
+      },
+      child: DefaultTabController(
+        length: 2,
+        child: new Scaffold(
+          key: _scaffoldKey,
+          appBar: buildAppBar(),
+          body: buildBody(),
+        ),
       ),
     );
   }

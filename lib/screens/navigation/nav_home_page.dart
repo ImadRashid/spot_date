@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:spotadate/components/cacle_date.dart';
 import 'package:spotadate/components/spot_filter_dialog.dart';
 import 'package:spotadate/models/home_images_model.dart';
 import 'package:spotadate/models/spot_filter.dart';
+import 'package:spotadate/screens/login_page.dart';
 import 'package:spotadate/screens/navigation/profile.dart';
 
 //import 'package:letsgetstarted/models/profile.dart';
@@ -77,9 +79,21 @@ class _NavHomePageState extends State<NavHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: buildBody(),
+    return WillPopScope(
+      onWillPop: () async {
+        CancleDateDialog(
+            context: context,
+            msg:" Are you sure you want to logout?",
+            onDismiss: () {
+              //navigateToHomePage();
+            }
+        ).show();// to perform on back pressed
+        return false;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: buildBody(),
+      ),
     );
   }
 
@@ -330,6 +344,7 @@ class _NavHomePageState extends State<NavHomePage> {
   // spot body content
   Widget buildSpotBodyContent() {
     return Expanded(
+      flex: 1,
       child: Padding(
         padding: EdgeInsets.only(top: 10),
         child: Column(
@@ -651,7 +666,7 @@ class _NavHomePageState extends State<NavHomePage> {
               setState(() {
                 currentSpotIndex = index;
                 spotPageController.animateToPage(index,
-                    duration: Duration(milliseconds: 1),
+                    duration: Duration(milliseconds: 1000),
                     curve: Curves.fastOutSlowIn);
               });
             },
@@ -787,7 +802,7 @@ class _NavHomePageState extends State<NavHomePage> {
               setState(() {
                 currentSpotIndex = index;
                 spotPageController.animateToPage(index,
-                    duration: Duration(milliseconds: 1),
+                    duration: Duration(milliseconds: 1000),
                     curve: Curves.fastOutSlowIn);
               });
             },

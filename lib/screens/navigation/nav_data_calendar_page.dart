@@ -7,6 +7,8 @@ import 'package:spotadate/utils/colors.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../home_page.dart';
+
 class NavDataCalendarPage extends StatefulWidget {
 
   NavDataCalendarPage({this.homeScaffold});
@@ -33,17 +35,26 @@ class _NavDataCalendarPageState extends State<NavDataCalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+        ); // Action to perform on back pressed
+        return false;
+      },
+      child: Scaffold(
 
-      appBar:buildAppBar(),
+        appBar:buildAppBar(),
 
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            buildCalendar(),
-            buildMybodyContent(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildCalendar(),
+              buildMybodyContent(),
+            ],
+          ),
         ),
       ),
     );
@@ -73,7 +84,7 @@ class _NavDataCalendarPageState extends State<NavDataCalendarPage> {
 
       title: Center(
         child: Text(
-          "Bookmarks",
+          "Date Calender",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: greyTextColor),
         ),
       ),

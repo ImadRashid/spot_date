@@ -11,6 +11,7 @@ import 'package:spotadate/ui/screens/upload_images/upload_image_screen.dart';
 import 'package:spotadate/utils/colors.dart';
 
 import '../edit_profile_page.dart';
+import '../home_page.dart';
 
 
 class NavSettingsPage extends StatefulWidget {
@@ -46,9 +47,18 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 40, left: 16),
-      child: buildBody(),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+        ); // Action to perform on back pressed
+        return false;
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 40, left: 16),
+        child: buildBody(),
+      ),
     );
   }
 

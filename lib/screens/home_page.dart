@@ -29,10 +29,11 @@ class _HomePageState extends State<HomePage> {
     this.context = context;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      key: _scaffoldKey,
-      drawer: buildNavigationDrawer(),
-      body: navPages()[navSelectedIndex],
+        backgroundColor: Colors.white,
+        key: _scaffoldKey,
+        drawer: buildNavigationDrawer(),
+        body: navPages()[navSelectedIndex],
+
 
 
     );

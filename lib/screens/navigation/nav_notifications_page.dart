@@ -13,6 +13,8 @@ import 'package:spotadate/utils/date_utils.dart';
 import 'package:spotadate/utils/notification_type.dart';
 import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
+import '../home_page.dart';
+
 class NavNotificationsPage extends StatefulWidget {
 
   NavNotificationsPage({@required this.homeScaffold});
@@ -43,9 +45,18 @@ class _NavNotificationsPageState extends State<NavNotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: buildBody(),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+        ); // Action to perform on back pressed
+        return false;
+      },
+      child: Scaffold(
+        appBar: buildAppBar(),
+        body: buildBody(),
+      ),
     );
   }
 
@@ -70,6 +81,9 @@ class _NavNotificationsPageState extends State<NavNotificationsPage> {
     return InkWell(
       onTap: () {
         homeScaffold.currentState.openDrawer();
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => HomePage()),);
       },
       child: Icon(
         Icons.menu,

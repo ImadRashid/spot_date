@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spotadate/core/constants/colors.dart';
 import 'package:spotadate/screens/splashscreen.dart';
 import 'package:spotadate/ui/screens/confrim_date_screen.dart';
 import 'package:spotadate/ui/screens/date_arrival_screen.dart';
@@ -29,6 +30,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RateExperienceModel()),
       ],
       child: MaterialApp(
+         theme: ThemeData(
+           cursorColor: Color(0xFFFF7525),
+           primaryColor: Color(0xFFFF7525),
+           primarySwatch:  Colors.orange,
+
+
+
+         ),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: Routerr.generateRoute,
         title: 'Spot New theme',

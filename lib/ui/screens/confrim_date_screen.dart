@@ -84,6 +84,7 @@ class _ConfirmDateScreenState extends State<ConfirmDateScreen> {
                           {
                             CancleDateDialog(
                                 context: context,
+                                msg:" Are you sure you want to cancel the date?",
                                 onDismiss: () {
                                   //navigateToHomePage();
                                 }

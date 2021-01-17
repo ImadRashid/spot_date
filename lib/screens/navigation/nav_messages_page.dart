@@ -6,6 +6,8 @@ import 'package:spotadate/ui/screens/confrim_date_screen.dart';
 import 'package:spotadate/utils/colors.dart';
 import 'package:spotadate/models/messages_model.dart';
 
+import '../home_page.dart';
+
 class MessagesScreen extends StatefulWidget {
   MessagesScreen({@required this.homeScaffold});
 
@@ -20,98 +22,107 @@ class _MessagesScreenState extends State<MessagesScreen> {
   final GlobalKey<ScaffoldState> homeScaffold;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Color(0xFFF9F9F9),
-        appBar: buildAppBar(),
-        body: ListView.builder(
-            itemCount: messagesList.length,
-            itemBuilder: (context, index){
-              return messagesList[index].haveLock == true ?
-              messagesList[index].isLocked == true ?
-              /// Locked contacts .... where direct messages are forbidden
-              ///
-              lockedMessages(messagesList, index):
-              /// Unlock messages ... can send direct messages
-              ///
-              GestureDetector(
-                onTap: (){
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => ConfirmDateScreen(
-                  //   name: messagesList[index].name,
-                  // )));
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => ConfirmDateScreen(
-                    name: messagesList[index].name,
-                    image: messagesList[index].image,
-                  )));
-                },
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            // image: (notification != null && notification.from != null && notification.from.profile != null
-                            //     && notification.from.profile.image != null)?
-                            // NetworkImage(
-                            //   notification.from.profile.image,
-                            // ):
-                            image: AssetImage(messagesList[index].image),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+        ); // Action to perform on back pressed
+        return false;
+      },
+      child: Scaffold(
+          backgroundColor: Color(0xFFF9F9F9),
+          appBar: buildAppBar(),
+          body: ListView.builder(
+              itemCount: messagesList.length,
+              itemBuilder: (context, index){
+                return messagesList[index].haveLock == true ?
+                messagesList[index].isLocked == true ?
+                /// Locked contacts .... where direct messages are forbidden
+                ///
+                lockedMessages(messagesList, index):
+                /// Unlock messages ... can send direct messages
+                ///
+                GestureDetector(
+                  onTap: (){
+                    // Navigator.push(context, MaterialPageRoute(builder: (_) => ConfirmDateScreen(
+                    //   name: messagesList[index].name,
+                    // )));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => ConfirmDateScreen(
+                      name: messagesList[index].name,
+                      image: messagesList[index].image,
+                    )));
+                  },
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              // image: (notification != null && notification.from != null && notification.from.profile != null
+                              //     && notification.from.profile.image != null)?
+                              // NetworkImage(
+                              //   notification.from.profile.image,
+                              // ):
+                              image: AssetImage(messagesList[index].image),
+                            ),
                           ),
                         ),
-                      ),
 
-                      //Image.asset(messagesList[index].image),
-                      title: Text(messagesList[index].name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                      subtitle: Row(
-                        children: [
-                          Image.asset('assets/images/messages_screen/open_lock.png'),
-                          Text('\t${messagesList[index].message}',style: TextStyle(fontSize: 10),),
-                        ],
+                        //Image.asset(messagesList[index].image),
+                        title: Text(messagesList[index].name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                        subtitle: Row(
+                          children: [
+                            Image.asset('assets/images/messages_screen/open_lock.png'),
+                            Text('\t${messagesList[index].message}',style: TextStyle(fontSize: 10),),
+                          ],
+                        ),
+                      ),
+                      Divider(),
+                    ],
+                  ),
+                ) :
+                /// Already started messages
+                ///
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => ConfirmDateScreen(
+                      name: messagesList[index].name,
+                      image: messagesList[index].image,
+                    )));
+                  },
+                  child: ListTile(
+                    leading: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          // image: (notification != null && notification.from != null && notification.from.profile != null
+                          //     && notification.from.profile.image != null)?
+                          // NetworkImage(
+                          //   notification.from.profile.image,
+                          // ):
+                          image: AssetImage(messagesList[index].image),
+                        ),
                       ),
                     ),
-                    Divider(),
-                  ],
-                ),
-              ) :
-              /// Already started messages
-              ///
-              GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => ConfirmDateScreen(
-                    name: messagesList[index].name,
-                    image: messagesList[index].image,
-                  )));
-                },
-                child: ListTile(
-                  leading: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        // image: (notification != null && notification.from != null && notification.from.profile != null
-                        //     && notification.from.profile.image != null)?
-                        // NetworkImage(
-                        //   notification.from.profile.image,
-                        // ):
-                        image: AssetImage(messagesList[index].image),
-                      ),
+                    title: Text(messagesList[index].name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                    subtitle: Text(messagesList[index].message,style: TextStyle(fontSize: 10),),
+                    trailing: Padding(
+                      padding: EdgeInsets.only(bottom: 20.0),
+                      child: Text(messagesList[index].lastSeen,style: TextStyle(fontSize: 8),),
                     ),
                   ),
-                  title: Text(messagesList[index].name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                  subtitle: Text(messagesList[index].message,style: TextStyle(fontSize: 10),),
-                  trailing: Padding(
-                    padding: EdgeInsets.only(bottom: 20.0),
-                    child: Text(messagesList[index].lastSeen,style: TextStyle(fontSize: 8),),
-                  ),
-                ),
-              );
-            }
-        )
+                );
+              }
+          )
+      ),
     );
   }
   /// Locked contacts .... where direct messages are forbidden
