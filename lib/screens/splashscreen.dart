@@ -1,13 +1,10 @@
-
-
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:spotadate/screens/onboarding.dart';
+import 'package:spotadate/screens/wrapper.dart';
 // import 'package:gymapp/authentication/login.dart';
 // import 'package:gymapp/models/constants.dart';
-
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -20,19 +17,16 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
         Duration(seconds: 5),
-            () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) =>  OnBoardingPage())));
-
-
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Wrapper())));
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-     // backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: Container(
-
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -60,12 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
                           //   size: 50.0,
                           // ),
                         ),
-
                       ],
                     ),
                   ),
                 ),
-
               ],
             )
           ],
@@ -74,4 +66,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-

@@ -1,15 +1,12 @@
-
-
-
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:spotadate/screens/signup_page.dart';
+import 'package:spotadate/screens/authentication/signup_page.dart';
 import 'package:spotadate/utils/colors.dart';
 
-import 'login_page.dart';
+import 'authentication/authenticate_screen_wrapper.dart';
+import 'authentication/login_page.dart';
 // import 'package:spot/pages/login_page.dart';
 // import 'package:spot/pages/signup_page.dart';
 // import 'package:spot/utils/colors.dart';
@@ -20,11 +17,10 @@ class OnBoardingPage extends StatefulWidget {
 }
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
-
   BuildContext context;
   int currentImagePosition;
 
-  bool check=true;
+  bool check = true;
 
   @override
   Widget build(BuildContext context) {
@@ -55,24 +51,27 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 buildTooltip(),
 
                 // margin
-                SizedBox(height: 100,),
+                SizedBox(
+                  height: 100,
+                ),
 
                 // get started button
                 buildGetStartedBtn(),
 
                 // margin
-                SizedBox(height:8,),
+                SizedBox(
+                  height: 8,
+                ),
 
                 // login button
                 buildLoginBtn(),
 
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
 
                 // skip and next button
-                check?buildImageChangeBtns():onlyBuildSkipBtn(),
-
-
-
+                check ? buildImageChangeBtns() : onlyBuildSkipBtn(),
               ],
             ),
           ),
@@ -88,42 +87,43 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       width: MediaQuery.of(context).size.width,
       child: Carousel(
         images: [
-          FittedBox(child: Image.asset('assets/images/onboarding1/onboarding1.png'), fit: BoxFit.fitWidth,),
-          FittedBox(child: Image.asset('assets/images/onboarding2/onboarding2.png'), fit: BoxFit.fitWidth,),
-          FittedBox(child: Image.asset('assets/images/onboarding3/onboarding3.png'), fit: BoxFit.fitWidth,),
-          FittedBox(child: Image.asset('assets/images/onboarding4/onboarding4.png'), fit: BoxFit.fitWidth,),
+          FittedBox(
+            child: Image.asset('assets/images/onboarding1/onboarding1.png'),
+            fit: BoxFit.fitWidth,
+          ),
+          FittedBox(
+            child: Image.asset('assets/images/onboarding2/onboarding2.png'),
+            fit: BoxFit.fitWidth,
+          ),
+          FittedBox(
+            child: Image.asset('assets/images/onboarding3/onboarding3.png'),
+            fit: BoxFit.fitWidth,
+          ),
+          FittedBox(
+            child: Image.asset('assets/images/onboarding4/onboarding4.png'),
+            fit: BoxFit.fitWidth,
+          ),
         ],
         dotBgColor: Colors.transparent,
         dotColor: Colors.white,
         dotIncreasedColor: orangeColor,
         dotVerticalPadding: 180,
-
-
-
-
-
-
         autoplayDuration: Duration(seconds: 3),
         onImageChange: (a, b) {
           setState(() {
             currentImagePosition = b;
-            if(currentImagePosition==3)
-              {
-                check=false;
-              }
-            else{
-              check=true;
+            if (currentImagePosition == 3) {
+              check = false;
+            } else {
+              check = true;
             }
           });
         },
-
       ),
     );
   }
 
-
-  Widget onlyBuildSkipBtn()
-  {
+  Widget onlyBuildSkipBtn() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -134,7 +134,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
-        SizedBox(width: 20,)
+        SizedBox(
+          width: 20,
+        )
       ],
     );
   }
@@ -173,91 +175,106 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       // });
       return Center(
         child: RichText(
-          text: TextSpan(
-              children: <TextSpan> [
-                TextSpan(
-                  text: "Lets get started",
-                  style: TextStyle(fontSize: 24, fontFamily: 'Lato', fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
-                      "ut labore et dolore",
-                  style: TextStyle(fontSize: 16, fontFamily: 'Lato', color: Colors.white),
-                ),
-              ]
-          ),
+          text: TextSpan(children: <TextSpan>[
+            TextSpan(
+              text: "Lets get started",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            TextSpan(
+              text:
+                  "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
+                  "ut labore et dolore",
+              style: TextStyle(
+                  fontSize: 16, fontFamily: 'Lato', color: Colors.white),
+            ),
+          ]),
           textAlign: TextAlign.center,
         ),
       );
-    }else if (currentImagePosition == 1){
+    } else if (currentImagePosition == 1) {
       // setState(() {
       //   check = true;
       // });
       return Center(
         child: RichText(
-          text: TextSpan(
-              children: <TextSpan> [
-                TextSpan(
-                  text: "Spot",
-                  style: TextStyle(fontSize: 24, fontFamily: 'Lato', fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
-                      "ut labore et dolore",
-                  style: TextStyle(fontSize: 16, fontFamily: 'Lato', color: Colors.white),
-                ),
-              ]
-          ),
+          text: TextSpan(children: <TextSpan>[
+            TextSpan(
+              text: "Spot",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            TextSpan(
+              text:
+                  "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
+                  "ut labore et dolore",
+              style: TextStyle(
+                  fontSize: 16, fontFamily: 'Lato', color: Colors.white),
+            ),
+          ]),
           textAlign: TextAlign.center,
         ),
       );
-    }else if (currentImagePosition == 2) {
+    } else if (currentImagePosition == 2) {
       // setState(() {
       //   check = true;
       // });
       return Center(
         child: RichText(
-          text: TextSpan(
-              children: <TextSpan> [
-                TextSpan(
-                  text: "Spot Zone",
-                  style: TextStyle(fontSize: 24, fontFamily: 'Lato', fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
-                      "ut labore et dolore",
-                  style: TextStyle(fontSize: 16, fontFamily: 'Lato', color: Colors.white),
-                ),
-              ]
-          ),
+          text: TextSpan(children: <TextSpan>[
+            TextSpan(
+              text: "Spot Zone",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            TextSpan(
+              text:
+                  "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
+                  "ut labore et dolore",
+              style: TextStyle(
+                  fontSize: 16, fontFamily: 'Lato', color: Colors.white),
+            ),
+          ]),
           textAlign: TextAlign.center,
         ),
       );
-    }else if (currentImagePosition == 3) {
-
+    } else if (currentImagePosition == 3) {
       // setState(() {
       //   check = false;
       // });
 
       return Center(
         child: RichText(
-          text: TextSpan(
-              children: <TextSpan> [
-                TextSpan(
-                  text: "Messaging",
-                  style: TextStyle(fontSize: 24, fontFamily: 'Lato', fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                TextSpan(
-                  text: "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
-                      "ut labore et dolore",
-                  style: TextStyle(fontSize: 16, fontFamily: 'Lato', color: Colors.white),
-                ),
-              ]
-          ),
+          text: TextSpan(children: <TextSpan>[
+            TextSpan(
+              text: "Messaging",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            TextSpan(
+              text:
+                  "\n\nLorem ipsum dolor sit amet, consetetur\nsadipscing elitr sed diam nonumy eirmod\ntempor invidunt"
+                  "ut labore et dolore",
+              style: TextStyle(
+                  fontSize: 16, fontFamily: 'Lato', color: Colors.white),
+            ),
+          ]),
           textAlign: TextAlign.center,
         ),
       );
-    }else {
+    } else {
       return Text("");
     }
   }
@@ -271,7 +288,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       child: MaterialButton(
         onPressed: () {
           // navigate to signup page
-          navigateToSignupPage();
+          // navigateToSignupPage();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AuthenticateScreenWrapper(false)),
+          );
         },
         color: orangeColor,
         shape: RoundedRectangleBorder(
@@ -279,7 +301,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         ),
         child: Text(
           "Get Started",
-          style: TextStyle(fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
+          style: TextStyle(
+              fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
         ),
       ),
     );
@@ -294,37 +317,34 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       child: MaterialButton(
         onPressed: () {
           // navigate to login page
-          navigateToLoginPage();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AuthenticateScreenWrapper(true)),
+          );
         },
         color: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
-          side: BorderSide(
-              color: Colors.white,
-              width: 1
-          ),
+          side: BorderSide(color: Colors.white, width: 1),
         ),
         child: Text(
           "Log In",
-          style: TextStyle(fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
+          style: TextStyle(
+              fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
         ),
       ),
     );
   }
 
- // navigate to signup page
-  void navigateToSignupPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignupPage()),
-    );
-  }
+  // navigate to signup page
+  // void navigateToSignupPage() {}
 
-  // navigate to login page
-  void navigateToLoginPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-   }
+  // // navigate to login page
+  // void navigateToLoginPage() {
+  //   Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => LoginPage()),
+  //   );
+  // }
 }

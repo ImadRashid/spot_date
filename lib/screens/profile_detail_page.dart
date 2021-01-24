@@ -407,6 +407,7 @@ class _ProfileDetailPageState extends State<ProfileDetailPage> {
 
             // margin
             SizedBox(width: 8,),
+            
 
             // heart
             InkWell(

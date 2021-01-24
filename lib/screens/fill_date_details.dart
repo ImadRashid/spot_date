@@ -1,20 +1,16 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:spotadate/components/date_type.dart';
 import 'package:spotadate/models/resturant.dart';
-import 'package:spotadate/models/spotzone.dart';
+// import 'package:spotadate/models/spotzone.dart';
 import 'package:spotadate/screens/spot_date_detail_page.dart';
 import 'package:spotadate/ui/screens/google_map_screen.dart';
 import 'package:spotadate/utils/colors.dart';
 import 'package:spotadate/utils/date_types.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
-
 
 class FillDateDetails extends StatefulWidget {
   @override
@@ -82,7 +78,8 @@ class _FillDateDetailsState extends State<FillDateDetails> {
       title: Center(
         child: Text(
           "Fill date details",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: greyTextColor),
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: greyTextColor),
         ),
       ),
     );
@@ -153,13 +150,15 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                 buildTitle(),
                 buildDateTypes(),
                 buildLocation(),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 buildCalendar(),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                   // buildSelectDate(),
+                    // buildSelectDate(),
                     buildSelectTime(),
                   ],
                 ),
@@ -171,7 +170,9 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                 // buildFemaleSwitch(),
                 // SizedBox(height: 20,),
                 // buildAgeSlider(),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 buildCreateBtn(),
               ],
             ),
@@ -190,9 +191,12 @@ class _FillDateDetailsState extends State<FillDateDetails> {
         children: [
           Text(
             "Title",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           TextFormField(
             controller: _titleController,
             textInputAction: TextInputAction.done,
@@ -200,7 +204,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
             validator: (value) {
               if (value.isEmpty) {
                 return "Description cannot cannot be empty";
-              }else {
+              } else {
                 return null;
               }
             },
@@ -215,8 +219,9 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                 borderRadius: BorderRadius.circular(4),
               ),
               hintText: "Enter spot zone title",
-              hintStyle: TextStyle(color: greyTextColor,),
-
+              hintStyle: TextStyle(
+                color: greyTextColor,
+              ),
             ),
             maxLength: 100,
             buildCounter: (context, {currentLength, isFocused, maxLength}) {
@@ -239,9 +244,12 @@ class _FillDateDetailsState extends State<FillDateDetails> {
         children: [
           Text(
             "Date Types",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               DateType(
@@ -250,7 +258,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -267,7 +275,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -283,7 +291,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -295,7 +303,9 @@ class _FillDateDetailsState extends State<FillDateDetails> {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               DateType(
@@ -304,7 +314,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -320,7 +330,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -357,8 +367,6 @@ class _FillDateDetailsState extends State<FillDateDetails> {
         break;
     }
   }
-
-
 
   Widget buildCalendar() {
     return Column(
@@ -443,16 +451,16 @@ class _FillDateDetailsState extends State<FillDateDetails> {
         children: [
           Text(
             "Location",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           InkWell(
-            onTap: ()
-            {
-              Navigator.push(context, MaterialPageRoute(builder:(context)=>GoogleMapScreen(
-
-
-              )));
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => GoogleMapScreen()));
             },
             child: Container(
               width: double.infinity,
@@ -472,7 +480,9 @@ class _FillDateDetailsState extends State<FillDateDetails> {
               ),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: InkWell(
               onTap: () {
@@ -481,7 +491,8 @@ class _FillDateDetailsState extends State<FillDateDetails> {
               },
               child: Text(
                 "Choose from map",
-                style: TextStyle(fontWeight: FontWeight.bold, color: orangeColor),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: orangeColor),
               ),
             ),
           ),
@@ -505,9 +516,14 @@ class _FillDateDetailsState extends State<FillDateDetails> {
           children: [
             Text(
               "Time",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               width: 150,
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -557,9 +573,14 @@ class _FillDateDetailsState extends State<FillDateDetails> {
           children: [
             Text(
               "Date",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               width: 150,
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -596,10 +617,11 @@ class _FillDateDetailsState extends State<FillDateDetails> {
 
   Widget buildLokkingFor() {
     return // i'm looking for text
-      Text(
-        "I'm looking for",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
-      );
+        Text(
+      "I'm looking for",
+      style: TextStyle(
+          fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+    );
   }
 
   // build male switch
@@ -660,17 +682,15 @@ class _FillDateDetailsState extends State<FillDateDetails> {
             // Age text
             Text(
               "Age",
-              style: TextStyle(fontSize: 16,
+              style: TextStyle(
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey),
             ),
 
-            Text(
-                "${minAge.round()} - ${maxAge.round()}"
-            ),
+            Text("${minAge.round()} - ${maxAge.round()}"),
           ],
         ),
-
         FlutterSlider(
           values: [minAge, maxAge],
           max: 100,
@@ -679,12 +699,8 @@ class _FillDateDetailsState extends State<FillDateDetails> {
           handlerHeight: 20,
           handlerWidth: 20,
           trackBar: FlutterSliderTrackBar(
-            activeTrackBar: BoxDecoration(
-                color: orangeColor
-            ),
-            inactiveTrackBar: BoxDecoration(
-                color: greyTextColor
-            ),
+            activeTrackBar: BoxDecoration(color: orangeColor),
+            inactiveTrackBar: BoxDecoration(color: greyTextColor),
           ),
           onDragging: (handlerIndex, lowerValue, upperValue) {
             setState(() {
@@ -694,16 +710,12 @@ class _FillDateDetailsState extends State<FillDateDetails> {
             });
           },
           handler: FlutterSliderHandler(
-            foregroundDecoration: BoxDecoration(
-                color: orangeColor,
-                shape: BoxShape.circle
-            ),
+            foregroundDecoration:
+                BoxDecoration(color: orangeColor, shape: BoxShape.circle),
           ),
           rightHandler: FlutterSliderHandler(
-            foregroundDecoration: BoxDecoration(
-                color: orangeColor,
-                shape: BoxShape.circle
-            ),
+            foregroundDecoration:
+                BoxDecoration(color: orangeColor, shape: BoxShape.circle),
           ),
         ),
       ],
@@ -746,8 +758,8 @@ class _FillDateDetailsState extends State<FillDateDetails> {
       child: Padding(
         padding: EdgeInsets.only(top: 20),
         child: MaterialButton(
-          onPressed: (){
-          //isCreateBtnEnabled? () {
+          onPressed: () {
+            //isCreateBtnEnabled? () {
             // if (validate()) {
             //   Spotzone spotzone = Spotzone();
             //   spotzone.title = _titleController.text.toString();
@@ -766,13 +778,10 @@ class _FillDateDetailsState extends State<FillDateDetails> {
             //   setState(() {
             //     isCreateBtnEnabled = false;
             //   });
-              //createSpotzone(spotzone);
-              Navigator.push(context, MaterialPageRoute(builder:(context)=>SpotDateDetailPage(
-
-
-              )));
-            }
-         ,
+            //createSpotzone(spotzone);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SpotDateDetailPage()));
+          },
           color: orangeColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -780,7 +789,11 @@ class _FillDateDetailsState extends State<FillDateDetails> {
           ),
           child: Text(
             "Create",
-            style: TextStyle(fontSize: 14.0, color: Colors.white, fontFamily: 'Lato', fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.white,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -813,17 +826,18 @@ class _FillDateDetailsState extends State<FillDateDetails> {
 
     if (errorText.isEmpty) {
       return true;
-    }else {
+    } else {
       showSnackbar(errorText);
       return false;
     }
   }
 
-
   // show snackbar
   void showSnackbar(String message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message),)));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _scaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text(message),
+            )));
   }
 
   // void createSpotzone(Spotzone spotzone) {
@@ -850,8 +864,7 @@ class _FillDateDetailsState extends State<FillDateDetails> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 
   // navigate to SelectResturantPage

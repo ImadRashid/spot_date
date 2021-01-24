@@ -1,9 +1,6 @@
-
 import 'dart:convert';
 
-
 class Profile {
-
   Profile({this.name});
 
   String name = "";
@@ -37,14 +34,14 @@ class Profile {
     this.dob = json['dob'];
     this.image = json['image'];
     print(json['latitude']);
-    //this.latitude = (json['latitude'] is double)? (json['latitude'] as double).toDouble(): (json['latitude'] as double).toDouble();
-    //this.longitude = (json['longitude'] is double)? (json['longitude'] as double).toDouble(): (json['longitude']as double).toDouble();
     this.createdAt = json['created_at'];
     this.updatedAt = json['updated_at'];
     this.address = json['address'];
     this.status = json['status'];
     this.height = json['height'];
-    this.userId = json['user_id'] is String? int.parse(json['user_id']) : json['user_id'];
+    this.userId = json['user_id'] is String
+        ? int.parse(json['user_id'])
+        : json['user_id'];
     this.location = LocationObj.fromJson(json['location']);
     List<dynamic> interestList = json['interests'];
     //this.interests = interestList.map((i) => Interest.fromJson(i)).toList();
@@ -80,34 +77,9 @@ class Profile {
 class Interest {
   String interest;
   Interest({this.interest});
-
-
-  //
-  // Interest.fromJson(Map<String, dynamic> json) {
-  //   this.interest = json['interest'];
-  // }
-  //
-  // Map<String, dynamic> toJson() {
-  //   Map<String, dynamic> json = Map();
-  //   json['interest'] = this.interest;
-  //   return json;
-  // }
 }
 
-List<Interest> interestList=[
-  Interest(
-    interest: "Nature",
-
-  ),
-  Interest(
-    interest: "Music",
-
-  ),
-  Interest(
-    interest: "travel",
-
-  ),
-];
+List<Interest> interestList = [];
 
 class Gallery {
   Gallery({this.image});

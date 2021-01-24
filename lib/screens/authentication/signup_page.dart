@@ -1,28 +1,26 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-// import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:spotadate/services/auth.dart';
 
-// import 'package:keyboard_avoider/keyboard_avoider.dart';
-// import 'package:spot/network/api/spot_apis.dart';
-// import 'package:spot/pages/login_page.dart';
 import 'package:spotadate/utils/colors.dart';
-// import 'package:spot/models/user.dart' as AuthUser;
 
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
+  final Function toggleView;
+  SignupPage(this.toggleView);
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final AuthService _auth = AuthService();
   bool isProgressEnabled = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -72,18 +70,6 @@ class _SignupPageState extends State<SignupPage> {
   Widget buildBodyContent() {
     return Stack(
       children: [
-        /*Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: double.infinity,
-            height: 50,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 30),
-              child: buildLoginBtn(),
-            ),
-          ),
-        ),*/
-
         Center(
           child: Padding(
             padding: EdgeInsets.all(24),
@@ -366,11 +352,32 @@ class _SignupPageState extends State<SignupPage> {
             width: 300,
             height: 40.0,
             child: MaterialButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   setState(() {
                     isProgressEnabled = true;
                   });
+                  dynamic result = await _auth.registerWithEmailAndPassword(
+                    _emailEditingController.text,
+                    _passwordEditingController.text,
+                    // _usernameController.text
+                  );
+
+                  if (result == null) {
+                    setState(() {
+                      isProgressEnabled = false;
+                    });
+                    Get.snackbar("ERROR", "Could not Create User");
+                  } else {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/wrapper', (context) => false);
+
+                    Get.snackbar("Success", "User Created and auto Logged In");
+
+                    print("User Created");
+                    print("Signed In sucessfully");
+                    print("User ID: ${result.uid}");
+                  }
                   //signup();
                 }
               },
@@ -465,7 +472,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
         InkWell(
           onTap: () {
-            navigateToLoginPage();
+            widget.toggleView();
           },
           child: Text(
             "Login",
@@ -607,12 +614,12 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   // navigate to login page
-  void navigateToLoginPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  }
+  // void navigateToLoginPage() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => LoginPage()),
+  //   );
+  // }
 }
 
 class MyBullet extends StatelessWidget {

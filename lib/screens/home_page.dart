@@ -1,11 +1,14 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:spotadate/components/nav_header.dart';
 import 'package:spotadate/components/nav_item.dart';
-import 'package:spotadate/screens/login_page.dart';
+import 'package:spotadate/models/user.dart';
+import 'package:spotadate/screens/authentication/login_page.dart';
 import 'package:spotadate/screens/navigation/nav_requests_page.dart';
 import 'package:spotadate/screens/navigation/nav_settings_page.dart';
+import 'package:spotadate/services/auth.dart';
 
 import 'navigation/nav_bookmarks_page.dart';
 import 'navigation/nav_data_calendar_page.dart';
@@ -14,7 +17,6 @@ import 'navigation/nav_messages_page.dart';
 import 'navigation/nav_notifications_page.dart';
 
 class HomePage extends StatefulWidget {
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -23,39 +25,58 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext context;
   int navSelectedIndex = 0;
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     YYDialog.init(context);
     this.context = context;
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        key: _scaffoldKey,
-        drawer: buildNavigationDrawer(),
-        body: navPages()[navSelectedIndex],
-
-
-
+      backgroundColor: Colors.white,
+      key: _scaffoldKey,
+      drawer: buildNavigationDrawer(),
+      body: navPages()[navSelectedIndex],
     );
   }
-  List<Widget> navPages () {
-    return [
-      NavHomePage(homeScaffold: _scaffoldKey,),
-      NavNotificationsPage(homeScaffold: _scaffoldKey,),
-      NavRequestsPage(homeScaffold: _scaffoldKey,),
-      NavDataCalendarPage(homeScaffold: _scaffoldKey,),
-      MessagesScreen(homeScaffold: _scaffoldKey,),
-      NavBookmarksPage(homeScaffold: _scaffoldKey,),
-      NavSettingsPage(homeScaffold: _scaffoldKey,),
 
+  List<Widget> navPages() {
+    return [
+      NavHomePage(
+        homeScaffold: _scaffoldKey,
+      ),
+      NavNotificationsPage(
+        homeScaffold: _scaffoldKey,
+      ),
+      NavRequestsPage(
+        homeScaffold: _scaffoldKey,
+      ),
+      NavDataCalendarPage(
+        homeScaffold: _scaffoldKey,
+      ),
+      MessagesScreen(
+        homeScaffold: _scaffoldKey,
+      ),
+      NavBookmarksPage(
+        homeScaffold: _scaffoldKey,
+      ),
+      NavSettingsPage(
+        homeScaffold: _scaffoldKey,
+      ),
     ];
   }
+
 // open nav drawer
   void openDrawer() {
     _scaffoldKey.currentState.openDrawer();
   }
+
   // build navigation drawer
   Widget buildNavigationDrawer() {
+    final user = Provider.of<User>(context);
+    final userData = Firestore.instance
+        .collection("userData")
+        .document(user.uid)
+        .snapshots();
     return Container(
       width: 250,
       child: Drawer(
@@ -64,9 +85,23 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               // navigation header
-              NavHeader(context: context, homeScaffold: _scaffoldKey),
+              StreamBuilder(
+                  stream: userData,
+                  builder: (context, snapshot) {
+                    return NavHeader(
+                      context: context,
+                      homeScaffold: _scaffoldKey,
+                      imgUrl: snapshot.data['imgUrl'],
+                      age: snapshot.data['age'],
+                      gender: snapshot.data['gender'],
+                      address: snapshot.data['address'],
+                      name: snapshot.data['name'],
+                    );
+                  }),
               // margin
-              SizedBox(height: 40,),
+              SizedBox(
+                height: 40,
+              ),
               // navigation drawer menu
               buildNavigationMenu(),
             ],
@@ -75,179 +110,123 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Widget buildNavigationMenu() {
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           // Home
-          buildHomeItem(),
+          buildNavItem(
+            title: "Home",
+            imgPath: "assets/images/home.svg",
+            index: 0,
+          ),
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Notifications
-          buildNotificationsItem(),
+          // buildNotificationsItem(),
+          buildNavItem(
+              title: "Notifications",
+              imgPath: "assets/images/notifications.svg",
+              index: 1),
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Requests
-          buildRequestsItem(),
+          buildNavItem(
+              title: "Requests",
+              imgPath: "assets/images/add_person.svg",
+              index: 2),
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Date calender
-          buildDateCalendarItem(),
+          // buildDateCalendarItem(),
+          buildNavItem(
+              title: "Date Calendar",
+              imgPath: "assets/images/date_range.svg",
+              index: 3),
+
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Messages
-          buildMessagesItem(),
+          // buildMessagesItem(),
+          buildNavItem(
+              title: "Messages",
+              imgPath: "assets/images/chatboxes.svg",
+              index: 4),
+
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Bookmarks
-          buildBookmarksItem(),
+          // buildBookmarksItem(),
+          buildNavItem(
+              title: "Bookmarks",
+              imgPath: "assets/images/bookmarks.svg",
+              index: 5),
+
           // spacer
           Spacer(),
           // Settings
-          buildSettingsItem(),
+          // buildSettingsItem(),
+          buildNavItem(
+              title: "Settings",
+              imgPath: "assets/images/settings.svg",
+              index: 6),
+
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Logout
-          buildLogoutItem(),
+          // buildLogoutItem(),
+          buildNavItem(
+              title: "Logout", imgPath: "assets/images/logout.svg", index: 7),
         ],
       ),
     );
   }
 
   // build nav home item
-  Widget buildHomeItem() {
+  Widget buildNavItem({String title, String imgPath, int index}) {
     return NavItem(
       onPressed: () {
-        print("Home taped");
-        setState(() {
-          navSelectedIndex = 0;
-        });
+        print("$title taped");
+        if (index != 7) {
+          setState(() {
+            navSelectedIndex = index;
+          });
+        } else {
+          logout();
+        }
         closeDrawer();
       },
-      title: "Home",
-      imgPath: "assets/images/home.svg",
-      fontWeight: navSelectedIndex == 0? FontWeight.w700 : FontWeight.w400,
+      title: title,
+      imgPath: imgPath,
+      fontWeight: navSelectedIndex == index ? FontWeight.w700 : FontWeight.w400,
     );
   }
 
-  // build nav notification item
-  Widget buildNotificationsItem() {
-    return NavItem(
-      onPressed: () {
-        print("Notifications taped");
-        setState(() {
-          navSelectedIndex = 1;
-        });
-        closeDrawer();
-      },
-      title: "Notifications",
-      imgPath: "assets/images/notifications.svg",
-      fontWeight: navSelectedIndex == 1? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-
-  // build nav requests item
-  Widget buildRequestsItem() {
-    return NavItem(
-      onPressed: () {
-        print("Requests taped");
-        setState(() {
-          navSelectedIndex = 2;
-        });
-        closeDrawer();
-      },
-      title: "Requests",
-      imgPath: "assets/images/add_person.svg",
-      fontWeight: navSelectedIndex == 2? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-
-  // build nav date calendar item
-  Widget buildDateCalendarItem() {
-    return NavItem(
-      onPressed: () {
-        print("Date Calendar taped");
-        setState(() {
-          navSelectedIndex = 3;
-        });
-        closeDrawer();
-      },
-      title: "Date Calendar",
-      imgPath: "assets/images/date_range.svg",
-      fontWeight: navSelectedIndex == 3? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-
-
-  // build nav messages item
-  Widget buildMessagesItem() {
-    return NavItem(
-      onPressed: () {
-        print("Messages taped");
-        setState(() {
-          navSelectedIndex = 4;
-        });
-        closeDrawer();
-      },
-      title: "Messages",
-      imgPath: "assets/images/chatboxes.svg",
-      fontWeight: navSelectedIndex == 4? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-
-  // build nav Bookmarks item
-  Widget buildBookmarksItem() {
-    return NavItem(
-      onPressed: () {
-        print("Bookmarks taped");
-        setState(() {
-          navSelectedIndex = 5;
-        });
-        closeDrawer();
-      },
-      title: "Bookmarks",
-      imgPath: "assets/images/bookmarks.svg",
-      fontWeight: navSelectedIndex == 5? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-
-  // build nav Settings item
-  Widget buildSettingsItem() {
-    return NavItem(
-      onPressed: () {
-        print("Settings taped");
-        setState(() {
-          navSelectedIndex = 6;
-        });
-        closeDrawer();
-      },
-      title: "Settings",
-      imgPath: "assets/images/settings.svg",
-      fontWeight: navSelectedIndex == 6? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-  Widget buildLogoutItem() {
-    return NavItem(
-      onPressed: () {
-        print("Logout taped");
-        closeDrawer();
-        logout();
-      },
-      title: "Logout",
-      imgPath: "assets/images/logout.svg",
-      fontWeight: navSelectedIndex == 7? FontWeight.w700 : FontWeight.w400,
-    );
-  }
-  // close drawer
   void closeDrawer() {
     if (_scaffoldKey.currentState.isDrawerOpen) {
       Navigator.pop(context);
     }
   }
+
   // logout
   void logout() {
+    _auth.signOut();
+    // Navigator.pushNamedAndRemoveUntil(context, '/wrapper', (context) => false);
     // PrefUtils.saveToken(null);
-    Navigator.push(context, MaterialPageRoute(builder:(context)=>LoginPage( )));
+    // Navigator.p(context, MaterialPageRoute(builder:(context)=>LoginPage()));
   }
 }

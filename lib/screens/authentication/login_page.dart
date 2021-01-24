@@ -1,11 +1,11 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:spotadate/main.dart';
-import 'package:spotadate/screens/signup_page.dart';
+import 'package:get/get.dart';
+// import 'package:spotadate/main.dart';
+import 'package:spotadate/screens/authentication/signup_page.dart';
+import 'package:spotadate/services/auth.dart';
 // import 'package:linkedin_login/linkedin_login.dart';
 // import 'package:spot/config.dart';
 // import 'package:spot/models/user.dart';
@@ -16,18 +16,19 @@ import 'package:spotadate/screens/signup_page.dart';
 // import 'package:spot/pages/token_page.dart';
 import 'package:spotadate/utils/colors.dart';
 
-import 'forgot_password_page.dart';
-import 'home_page.dart';
+import '../forgot_password_page.dart';
+import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
+  final Function toggleView;
+  LoginPage(this.toggleView);
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final AuthService _auth = AuthService();
   bool isProgressEnabled = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -40,19 +41,18 @@ class _LoginPageState extends State<LoginPage> {
 
   bool showPassword = false;
 
- // SpotApis api = SpotApis();
+  // SpotApis api = SpotApis();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        body: buildBody(),
-        // signup button
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(bottom: 30),
-          child: buildSignupBtn(),
-        ),
-
+      key: _scaffoldKey,
+      body: buildBody(),
+      // signup button
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 30),
+        child: buildSignupBtn(),
+      ),
     );
   }
 
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   // if progress enabled then show progress only
   // otherwise show body contents
   Widget buildBody() {
-    return isProgressEnabled? buildProgressBar() : buildBodyContent();
+    return isProgressEnabled ? buildProgressBar() : buildBodyContent();
   }
 
   // build progress bar in center
@@ -93,29 +93,40 @@ class _LoginPageState extends State<LoginPage> {
                   // logo
                   buildLogo(),
                   //margin
-                  SizedBox(height: 24,),
+                  SizedBox(
+                    height: 24,
+                  ),
                   // Description
                   buildDescription(),
                   // margin
-                  SizedBox(height: 24,),
+                  SizedBox(
+                    height: 24,
+                  ),
                   // Login title(Login with)
                   buildLoginTitle(),
                   // margin
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   // Social Icons
                   buildSocialIcons(),
                   // margin
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   // Or
                   buildOrText(),
                   // margin
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   // Login Form
                   buildLoginForm(),
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   // Login Form
                   buildForgotPasswordBtn(),
-
                 ],
               ),
             ),
@@ -146,7 +157,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildLoginTitle() {
     return Text(
       "Login with",
-      style: TextStyle(fontSize: 18, fontFamily: 'Lato', fontWeight: FontWeight.bold, color: greyTextColor),
+      style: TextStyle(
+          fontSize: 18,
+          fontFamily: 'Lato',
+          fontWeight: FontWeight.bold,
+          color: greyTextColor),
       textAlign: TextAlign.center,
     );
   }
@@ -169,7 +184,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         // margin
-        SizedBox(width: 8,),
+        SizedBox(
+          width: 8,
+        ),
 
         // Twitter
         InkWell(
@@ -182,13 +199,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         // margin
-        SizedBox(width: 8,),
+        SizedBox(
+          width: 8,
+        ),
 
         // Instagram
         InkWell(
-          onTap: () {
-
-          },
+          onTap: () {},
           child: SvgPicture.asset(
             'assets/images/instagram.svg',
             width: 30,
@@ -197,7 +214,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
 
         // margin
-        SizedBox(width: 8,),
+        SizedBox(
+          width: 8,
+        ),
 
         // Linkedin
         InkWell(
@@ -218,7 +237,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildOrText() {
     return Text(
       "Or",
-      style: TextStyle(fontSize: 18, fontFamily: 'Lato', fontWeight: FontWeight.bold, color: greyTextColor),
+      style: TextStyle(
+          fontSize: 18,
+          fontFamily: 'Lato',
+          fontWeight: FontWeight.bold,
+          color: greyTextColor),
       textAlign: TextAlign.center,
     );
   }
@@ -239,12 +262,13 @@ class _LoginPageState extends State<LoginPage> {
               FocusScope.of(context).requestFocus(_passwordFocusNode);
             },
             validator: (value) {
-              var reg = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+              var reg = RegExp(
+                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
               if (value.isEmpty) {
                 return "Email cannot be empty";
-              }else if (!reg.hasMatch(value)){
+              } else if (!reg.hasMatch(value)) {
                 return "Input valid email address";
-              }else {
+              } else {
                 return null;
               }
             },
@@ -264,7 +288,9 @@ class _LoginPageState extends State<LoginPage> {
           // end Input field (Email)
 
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
 
           // Password
           TextFormField(
@@ -276,7 +302,7 @@ class _LoginPageState extends State<LoginPage> {
             validator: (value) {
               if (value.isEmpty) {
                 return "Password cannot be empty";
-              }else {
+              } else {
                 return null;
               }
             },
@@ -294,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
               suffixIcon: IconButton(
                 icon: Icon(
                   Icons.remove_red_eye,
-                  color: !this.showPassword? Colors.grey : orangeColor,
+                  color: !this.showPassword ? Colors.grey : orangeColor,
                 ),
                 onPressed: () {
                   setState(() => this.showPassword = !this.showPassword);
@@ -305,22 +331,45 @@ class _LoginPageState extends State<LoginPage> {
           // end Input field (Password)
 
           // margin
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
 
           // Login button
           SizedBox(
             width: 300,
             height: 40.0,
             child: MaterialButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   setState(() {
                     isProgressEnabled = true;
                   });
-                 // login();
+                  // login();
+                  dynamic result = await _auth.signInWithEmailAndPassword(
+                      _emailEditingController.text,
+                      _passwordEditingController.text);
+                  if (result == null) {
+                    print('SignIn error');
+                    setState(() {
+                      // email = "";
+                      // password = "";
+                      isProgressEnabled = false;
+                    });
+                    Get.snackbar("ERROR", "Try Again.!");
+                  } else {
+                    print("Signed In sucessfully");
+                    print("User ID: ${result.uid}");
 
-                  navigateToHomePage();
+                    Get.snackbar("SUCCESS", "Login Successful.!");
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/wrapper', (context) => false);
+                    // setState(() {
+                    //   _isLoading = false;
+                    // });
+                  }
                 }
+                // navigateToHomePage();
               },
               color: orangeColor,
               elevation: 0,
@@ -329,7 +378,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Text(
                 "Log In",
-                style: TextStyle(fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
+                style: TextStyle(
+                    fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
               ),
             ),
           ),
@@ -362,12 +412,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
         InkWell(
           onTap: () {
-            print("hello");
-            navigateToSignupPage();
+            print("SignUp Page Loading...");
+            widget.toggleView();
           },
           child: Text(
             "Sign Up",
-            style: TextStyle(color: orangeColor,),
+            style: TextStyle(
+              color: orangeColor,
+            ),
           ),
         ),
       ],
@@ -396,13 +448,11 @@ class _LoginPageState extends State<LoginPage> {
   //   });
   // }
 
-  void navigateToHomePage()
-  {
+  void navigateToHomePage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
+      MaterialPageRoute(builder: (context) => HomePage()), //HomePage()
     );
-
   }
 
   // sigin with facebook
@@ -417,17 +467,20 @@ class _LoginPageState extends State<LoginPage> {
 
   // show snackbar
   void showSnackbar(String message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message),)));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _scaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text(message),
+            )));
   }
 
   // navigate to signup page
-  void navigateToSignupPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignupPage()),
-    );
-  }
+  // void navigateToSignupPage() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => SignupPage()),
+  //   );
+  // }
+
   //
   // // navigate to reset password page
   void navigateToResetPasswordPage() {
@@ -460,7 +513,6 @@ class _LoginPageState extends State<LoginPage> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 }

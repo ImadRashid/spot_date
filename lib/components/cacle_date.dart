@@ -1,21 +1,11 @@
-
-
-
-
-
-
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:spotadate/screens/login_page.dart';
+import 'package:spotadate/screens/authentication/login_page.dart';
 import 'package:spotadate/utils/colors.dart';
 
 class CancleDateDialog {
-
-  CancleDateDialog({this.context,this.msg, this.onDismiss});
+  CancleDateDialog({this.context, this.msg, this.onDismiss});
 
   String msg;
 
@@ -39,7 +29,9 @@ class CancleDateDialog {
               //buildCrossBtn(),
               //SizedBox(height: 10,),
               buildDescription(),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               buildVerifyBtn(),
             ],
           ),
@@ -54,10 +46,10 @@ class CancleDateDialog {
         Expanded(
           child: MaterialButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LoginPage()));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => LoginPage()));
             },
             color: orangeColor,
             elevation: 0,
@@ -74,12 +66,13 @@ class CancleDateDialog {
             ),
           ),
         ),
-        SizedBox(width: 10,),
+        SizedBox(
+          width: 10,
+        ),
         Expanded(
           child: MaterialButton(
-            onPressed: ()
-            {
-                Navigator.pop(context);
+            onPressed: () {
+              Navigator.pop(context);
             },
             // isVerifyBtnEnabled? () {
             //   setState(() {
@@ -95,11 +88,14 @@ class CancleDateDialog {
             ),
             child: Text(
               "No",
-              style: TextStyle(fontSize: 14.0, color: orangeColor, fontFamily: 'Lato', fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 14.0,
+                  color: orangeColor,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.bold),
             ),
           ),
         )
-
       ],
     );
   }
@@ -125,7 +121,6 @@ class CancleDateDialog {
 
   // description
   Widget buildDescription() {
-
     return Row(
       children: [
         SvgPicture.asset(
@@ -136,10 +131,10 @@ class CancleDateDialog {
         Expanded(
           child: Text(
             "$msg",
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),
-
       ],
     );
   }

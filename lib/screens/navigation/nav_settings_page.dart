@@ -1,36 +1,31 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:spotadate/models/user.dart';
 import 'package:spotadate/screens/navigation/profile.dart';
-// import 'package:spot/network/api/spot_apis.dart';
-// import 'package:spot/pages/edit_profile_page.dart';
-import 'package:spotadate/screens/gallery_page.dart';
 import 'package:spotadate/ui/screens/upload_images/upload_image_screen.dart';
 import 'package:spotadate/utils/colors.dart';
-
 import '../edit_profile_page.dart';
-import '../home_page.dart';
-
 
 class NavSettingsPage extends StatefulWidget {
-
-  NavSettingsPage({@required this.homeScaffold});
+  final name;
+  final imgUrl;
+  NavSettingsPage({@required this.homeScaffold, this.name, this.imgUrl});
 
   final GlobalKey<ScaffoldState> homeScaffold;
 
   @override
-  _NavSettingsPageState createState() => _NavSettingsPageState(homeScaffold: homeScaffold);
+  _NavSettingsPageState createState() =>
+      _NavSettingsPageState(homeScaffold: homeScaffold);
 }
 
 class _NavSettingsPageState extends State<NavSettingsPage> {
-
   _NavSettingsPageState({@required this.homeScaffold});
 
   final GlobalKey<ScaffoldState> homeScaffold;
-
-  //SpotApis api = SpotApis();
 
   Profile profile;
 
@@ -49,10 +44,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),  //HomePage()
-        ); // Action to perform on back pressed
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/wrapper', (context) => false); //HomePage()
+        // ); // Action to perform on back pressed
         return false;
       },
       child: Container(
@@ -63,6 +57,10 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
   }
 
   Widget buildBody() {
+    // return
+    // StreamBuilder(
+    // stream: userData,
+    // builder: (context, snapshot) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -72,6 +70,8 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
         buildMenuWidgets(),
       ],
     );
+    // }
+    // );
   }
 
   // nav menu icon
@@ -96,7 +96,8 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
         buildNavMenuIcon(),
         Text(
           "Settings",
-          style: TextStyle(fontSize: 16, color: greyTextColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 16, color: greyTextColor, fontWeight: FontWeight.bold),
         ),
         // empty container
         Container(),
@@ -106,72 +107,100 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
 
   // profile image, name, edit profile button
   Widget buildProfileWidgets() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(top: 20),
-        child: Column(
-          children: [
-            // user image(circle)
-            Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: (profile != null && profile.image != null && profile.image.isNotEmpty)?
-                  NetworkImage(
-                    profile.image
-                  ):
-                  AssetImage('assets/ben.png'),
-                ),
-              ),
-            ),
-            // end user circle image
-            //
-            //
-
-            // margin
-            SizedBox(height: 1,),
-
-            // name
-            Text(
-              "Ben Parker",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Poppins', color: Colors.black),
-            ),
-            // end name
-            //
-            //
-
-            // margin
-            SizedBox(height: 8,),
-
-            // edit profile button
-            SizedBox(
-              width: 250,
-              child: FlatButton(
-                onPressed: () {
-                  print("Edit profile pressed");
-                  navigateToEditProfilePage();
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: BorderSide(
-                    color: deepOrange,
-                    width: 1,
+    final user = Provider.of<User>(context);
+    final userData = Firestore.instance
+        .collection("userData")
+        .document(user.uid)
+        .snapshots();
+    return StreamBuilder(
+        stream: userData,
+        builder: (context, snapshot) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  // user image(circle)
+                  Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(snapshot.data['imgUrl']),
+                        // (profile != null &&
+                        //         profile.image != null &&
+                        //         profile.image.isNotEmpty)
+                        //     ? NetworkImage(profile.image)
+                        //     : AssetImage('assets/ben.png'),
+                      ),
+                    ),
                   ),
-                ),
-                child: Text(
-                  "Edit Profile",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: deepOrange),
-                ),
+                  // end user circle image
+                  //
+                  //
+
+                  // margin
+                  SizedBox(
+                    height: 1,
+                  ),
+
+                  // name
+                  Text(
+                    snapshot.data['name'],
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                        color: Colors.black),
+                  ),
+                  // end name
+                  //
+                  //
+
+                  // margin
+                  SizedBox(
+                    height: 8,
+                  ),
+
+                  // edit profile button
+                  SizedBox(
+                    width: 250,
+                    child: FlatButton(
+                      onPressed: () {
+                        print("Edit profile pressed");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile(
+                                    imgUrl: snapshot.data['imgUrl'],
+                                    userId: user.uid,
+                                    interests: snapshot.data['interests'],
+                                    gender: snapshot.data['gender'],
+                                    sexP: snapshot.data['sexualPreferences'],
+                                  )),
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side: BorderSide(
+                          color: deepOrange,
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        "Edit Profile",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: deepOrange),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
   // build menus
@@ -195,7 +224,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     height: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "Notifications",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -208,14 +239,13 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
             //
 
             // margin
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
 
             // General
             InkWell(
-              onTap: () {
-
-
-              },
+              onTap: () {},
               child: Row(
                 children: [
                   Icon(
@@ -224,7 +254,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     size: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "General",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -237,7 +269,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
             //
 
             // margin
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
 
             // Account
             InkWell(
@@ -252,7 +286,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     size: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "Account",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -265,7 +301,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
             //
 
             // margin
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
 
             // Gallery
             InkWell(
@@ -281,7 +319,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     size: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "Gallery",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -294,7 +334,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
             //
 
             // margin
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
 
             // Privacy
             InkWell(
@@ -309,7 +351,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     size: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "Privacy",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -322,7 +366,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
             //
 
             // margin
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
 
             // Block
             InkWell(
@@ -337,7 +383,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     size: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "Block",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -350,7 +398,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
             //
 
             // margin
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
 
             // Help
             InkWell(
@@ -365,7 +415,9 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
                     size: 16,
                   ),
                   // margin
-                  SizedBox(width: 24,),
+                  SizedBox(
+                    width: 24,
+                  ),
                   Text(
                     "Help",
                     style: TextStyle(fontSize: 14, fontFamily: 'Lato'),
@@ -394,23 +446,21 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
   //   });
   // }
 
-  void navigateToEditProfilePage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditProfile()),
-    );
-  }
+  // void navigateToEditProfilePage() {
+
+  // }
 
   void navigateToGalleryPage() {
-    Navigator.push(context, MaterialPageRoute(builder:(context)=>UploadImageScreen(
-
-    )));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UploadImageScreen()));
   }
 
   // show snackbar
   void showSnackbar(String message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        homeScaffold.currentState.showSnackBar(SnackBar(content: Text(message),)));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => homeScaffold.currentState.showSnackBar(SnackBar(
+              content: Text(message),
+            )));
   }
 
   // show toast
@@ -422,8 +472,6 @@ class _NavSettingsPageState extends State<NavSettingsPage> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
-
 }

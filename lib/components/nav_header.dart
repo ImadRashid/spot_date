@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,18 +10,29 @@ import 'package:spotadate/utils/date_utils.dart';
 import 'package:spotadate/utils/strings.dart';
 
 class NavHeader extends StatefulWidget {
-
-  NavHeader({@required this.context, @required this.homeScaffold});
+  String name;
+  String address;
+  String age;
+  String gender;
+  String imgUrl;
+  NavHeader(
+      {@required this.context,
+      @required this.homeScaffold,
+      this.age,
+      this.gender,
+      this.name,
+      this.address,
+      this.imgUrl});
 
   BuildContext context;
   final GlobalKey<ScaffoldState> homeScaffold;
 
   @override
-  _NavHeaderState createState() => _NavHeaderState(context: context, homeScaffold: homeScaffold);
+  _NavHeaderState createState() =>
+      _NavHeaderState(context: context, homeScaffold: homeScaffold);
 }
 
 class _NavHeaderState extends State<NavHeader> {
-
   _NavHeaderState({@required this.context, @required this.homeScaffold});
 
   BuildContext context;
@@ -47,11 +57,15 @@ class _NavHeaderState extends State<NavHeader> {
           // user image(circle)
           buildUserImage(),
           // margin
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           // name
           buildUserName(),
           // margin
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           // Row(female icon, age, location)
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -59,20 +73,25 @@ class _NavHeaderState extends State<NavHeader> {
               // female icon if user is female
               buildFemaleIcon(),
               // margin
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
               // age
               buildAge(),
               // margin
-              SizedBox(width: 16,),
+              SizedBox(
+                width: 16,
+              ),
               // location arrow if location exists
               buildLocationArrow(),
               // margin
-              SizedBox(width: 4,),
+              SizedBox(
+                width: 4,
+              ),
               // address
               buildAddress(),
             ],
           ),
-
         ],
       ),
     );
@@ -81,23 +100,23 @@ class _NavHeaderState extends State<NavHeader> {
   // build drawer icon
   Widget buildDrawerIcon() {
     return // drawer icon for close
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          InkWell(
-            onTap: () {
-              if (homeScaffold.currentState.isDrawerOpen) {
-                Navigator.pop(context);
-              }
-            },
-            child: Icon(
-              Icons.menu,
-              color: orangeColor,
-              size: 24,
-            ),
+        Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        InkWell(
+          onTap: () {
+            if (homeScaffold.currentState.isDrawerOpen) {
+              Navigator.pop(context);
+            }
+          },
+          child: Icon(
+            Icons.close,
+            color: orangeColor,
+            size: 24,
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 
   // build user image (cirlce)
@@ -126,22 +145,22 @@ class _NavHeaderState extends State<NavHeader> {
         width: 100,
         height: 100,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image:AssetImage('assets/ben.png'),
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image:
+                  NetworkImage(widget.imgUrl), // AssetImage('assets/ben.png'),
+            )
+            // image: DecorationImage(
+            //   fit: BoxFit.cover,
+            //   image: (user != null && user.profile != null && user.profile.image != null && user.profile.image.isNotEmpty)?
+            //   // NetworkImage(
+            //   //   user.profile.image,
+            //   // ):
 
-          )
-          // image: DecorationImage(
-          //   fit: BoxFit.cover,
-          //   image: (user != null && user.profile != null && user.profile.image != null && user.profile.image.isNotEmpty)?
-          //   // NetworkImage(
-          //   //   user.profile.image,
-          //   // ):
-
-          //   AssetImage('assets/images/placeholder.jpg'),
-          // ),
-        ),
+            //   AssetImage('assets/images/placeholder.jpg'),
+            // ),
+            ),
       ),
     );
   }
@@ -149,9 +168,10 @@ class _NavHeaderState extends State<NavHeader> {
   // build user name
   Widget buildUserName() {
     return Text(
-      "Ben Parker",
+      widget.name,
       //(user != null && user.profile != null && user.profile.image != null)? user.profile.name : "",
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Poppins'),
+      style: TextStyle(
+          fontSize: 24, fontWeight: FontWeight.bold, fontFamily: 'Poppins'),
     );
   }
 
@@ -176,8 +196,10 @@ class _NavHeaderState extends State<NavHeader> {
     return Text(
       // (user != null && user.profile != null && user.profile.dob != null)?
       // DateUtils.getAgeFromDob(user.profile.dob).toString(): "",
-      "22",
-      style: TextStyle(fontSize: 12,),
+      widget.age,
+      style: TextStyle(
+        fontSize: 12,
+      ),
     );
   }
 
@@ -198,8 +220,10 @@ class _NavHeaderState extends State<NavHeader> {
       child: Text(
         // (user != null && user.profile != null && user.profile.address != null)?
         // user.profile.address: "",
-        "London, England",
-        style: TextStyle(fontSize: 12,),
+        widget.address,
+        style: TextStyle(
+          fontSize: 12,
+        ),
       ),
     );
   }
@@ -219,8 +243,10 @@ class _NavHeaderState extends State<NavHeader> {
 
   // show snackbar
   void showSnackbar(String message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        homeScaffold.currentState.showSnackBar(SnackBar(content: Text(message),)));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => homeScaffold.currentState.showSnackBar(SnackBar(
+              content: Text(message),
+            )));
   }
 
   // show toast
@@ -232,9 +258,6 @@ class _NavHeaderState extends State<NavHeader> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
-
-
 }

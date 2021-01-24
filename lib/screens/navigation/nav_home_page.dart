@@ -6,7 +6,7 @@ import 'package:spotadate/components/cacle_date.dart';
 import 'package:spotadate/components/spot_filter_dialog.dart';
 import 'package:spotadate/models/home_images_model.dart';
 import 'package:spotadate/models/spot_filter.dart';
-import 'package:spotadate/screens/login_page.dart';
+import 'package:spotadate/screens/authentication/login_page.dart';
 import 'package:spotadate/screens/navigation/profile.dart';
 
 //import 'package:letsgetstarted/models/profile.dart';
@@ -82,12 +82,12 @@ class _NavHomePageState extends State<NavHomePage> {
     return WillPopScope(
       onWillPop: () async {
         CancleDateDialog(
-            context: context,
-            msg:" Are you sure you want to logout?",
-            onDismiss: () {
-              //navigateToHomePage();
-            }
-        ).show();// to perform on back pressed
+                context: context,
+                msg: " Are you sure you want to logout?",
+                onDismiss: () {
+                  //navigateToHomePage();
+                })
+            .show(); // to perform on back pressed
         return false;
       },
       child: Scaffold(
@@ -415,7 +415,8 @@ class _NavHomePageState extends State<NavHomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ImagesSliderScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => ImagesSliderScreen()),
                         );
                       },
                       child: Container(
@@ -775,10 +776,11 @@ class _NavHomePageState extends State<NavHomePage> {
       },
       controller: spotPageController,
       itemBuilder: (context, index) {
-        return buildSpotZoneImages(context,index);
+        return buildSpotZoneImages(context, index);
       },
     );
   }
+
   Widget buildSpotZoneImageListView() {
     return ListView.builder(
       shrinkWrap: true,
@@ -786,10 +788,11 @@ class _NavHomePageState extends State<NavHomePage> {
       itemCount: homeImagesList.length,
       controller: _spotScrollController,
       itemBuilder: (context, index) {
-        return buildSpotZoneImageListItem(context,index);
+        return buildSpotZoneImageListItem(context, index);
       },
     );
   }
+
   Widget buildSpotZoneImageListItem(BuildContext context, int index) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -848,12 +851,11 @@ class _NavHomePageState extends State<NavHomePage> {
     );
   }
 
-
-  Widget buildSpotZoneImages(BuildContext context,int index) {
+  Widget buildSpotZoneImages(BuildContext context, int index) {
     return Stack(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height*0.65,
+          height: MediaQuery.of(context).size.height * 0.65,
           child: Card(
             borderOnForeground: true,
             shape: RoundedRectangleBorder(
@@ -870,17 +872,18 @@ class _NavHomePageState extends State<NavHomePage> {
                     //navigateToProfileDetailPage(spots[index]);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ImagesSliderScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => ImagesSliderScreen()),
                     );
                   },
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        // image: NetworkImage(
-                        //   "assets/images/placeholder.jpg",
-                        //   //spots[index].image,
-                        // ),
+                          // image: NetworkImage(
+                          //   "assets/images/placeholder.jpg",
+                          //   //spots[index].image,
+                          // ),
                           image: AssetImage(homeImagesList[index].image),
                           fit: BoxFit.cover),
                     ),
@@ -994,42 +997,34 @@ class _NavHomePageState extends State<NavHomePage> {
         ),
         Container(
           margin: EdgeInsets.only(top: 380),
-
-          child:Center(
+          child: Center(
             child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                          colors: <Color>[
-                            heartBackgroundColor1,
-                            heartBackgroundColor2,
-                            heartBackgroundColor3,
-                            heartBackgroundColor4,
-                            heartBackgroundColor5
-                          ],
-                          //stops: [0.1, 0.5],
-                          begin: Alignment.topLeft),
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/images/heart.svg',
-                      color: Colors.white,
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                    colors: <Color>[
+                      heartBackgroundColor1,
+                      heartBackgroundColor2,
+                      heartBackgroundColor3,
+                      heartBackgroundColor4,
+                      heartBackgroundColor5
+                    ],
+                    //stops: [0.1, 0.5],
+                    begin: Alignment.topLeft),
+              ),
+              child: SvgPicture.asset(
+                'assets/images/heart.svg',
+                color: Colors.white,
+                width: 40,
+                height: 40,
+              ),
+            ),
           ),
         )
       ],
-    ) ;
-
-
-
+    );
   }
-
-
-
-
 
   void navigateToProfileDetailPage(Profile profile) {
     Navigator.push(

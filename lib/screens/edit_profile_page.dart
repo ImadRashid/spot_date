@@ -1,30 +1,53 @@
+import 'dart:io';
 
-
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:spotadate/core/constants/colors.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:spotadate/core/constants/colors.dart';
 import 'package:spotadate/screens/navigation/profile.dart';
-import 'package:spotadate/ui/custom_widgets/messages_screens_app_bar.dart';
+import 'package:spotadate/services/database.dart';
+// import 'package:spotadate/ui/custom_widgets/messages_screens_app_bar.dart';
 import 'package:spotadate/utils/colors.dart';
-import 'package:spotadate/utils/colors.dart';
+// import 'package:spotadate/utils/colors.dart';
+import 'package:uuid/uuid.dart';
 
 class EditProfile extends StatefulWidget {
+  final imgUrl;
+  final userId;
+  final interests;
+  final gender;
+  final sexP;
+  EditProfile(
+      {this.imgUrl, this.userId, this.gender, this.interests, this.sexP});
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
+// enum Gender{
+//   male
+// }
 class _EditProfileState extends State<EditProfile> {
-  int genderGroupValue = 0;
-  int maleValue = 1;
-  int femaleValue = 2;
-  int nonBinaryValue = 3;
+  String genderGroupValue; // = 0;
+  // String maleValue; // = 1;
+  // String femaleValue; //= 2;
+  // String nonBinaryValue; //= 3;
 
-  int sexualPreferenceGroupValue = 0;
-  int straightValue = 1;
-  int biValue = 2;
-  int gayValue = 3;
-
-
+  String sexualPreferenceGroupValue;
+  // int straightValue = 1;
+  // int biValue = 2;
+  // int gayValue = 3;
+  List<String> _interests = [];
+  final _nameEditingController = TextEditingController();
+  final _interestEditingController = TextEditingController();
+  final _nameFocusNode = FocusNode();
+  final _usernameEditingController = TextEditingController();
+  final _usernameFocusNode = FocusNode();
+  final _occupationEditingController = TextEditingController();
+  final _occupationFocusNode = FocusNode();
+  final _aboutEditingController = TextEditingController();
+  final _aboutFocusNode = FocusNode();
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -37,10 +60,65 @@ class _EditProfileState extends State<EditProfile> {
 
     //setData();
   }
+
+  final ImagePicker _picker = ImagePicker();
+  var pid;
+  File _imageFile;
+  // final DatabaseService _data = DatabaseService(uid: _auth.user);
+  Future getImage() async {
+    var image =
+        await _picker.getImage(source: ImageSource.gallery, maxWidth: 400);
+
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+        print('Image Path ${_imageFile.path}');
+      });
+    } else {
+      Get.snackbar("ERROR", "Error Fetching Image, Try Again");
+      print("Error fetching image from Gallery");
+    }
+    // dynamic imgUrl = await uploadPic();
+    // await DatabaseService(uid: widget.userId).changeProfilePic(
+    //   imgUrl: imgUrl,
+    // );
+  }
+
+  Future uploadPic() async {
+    pid = Uuid().v4();
+    var localImagePath = _imageFile.path;
+    var fileExtension = localImagePath.substring(localImagePath.length - 3);
+
+    print(fileExtension);
+    print(pid);
+    StorageReference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('profilePictures/$pid.$fileExtension');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    dynamic url = await firebaseStorageRef.getDownloadURL();
+    print(await url);
+    setState(() {
+      print("Picture uploaded");
+      Get.snackbar("Success", "Image Uploaded");
+      // Scaffold.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Picture Uploaded'),
+      //   ),
+      // );
+      // Get.snackbar("Success", "Picture Uploaded");
+    });
+
+    // return url;
+    await DatabaseService(uid: widget.userId).changeProfilePic(
+      imgUrl: url,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:buildAppBar(),
+      appBar: buildAppBar(),
       body: buildBody(),
     );
   }
@@ -57,7 +135,6 @@ class _EditProfileState extends State<EditProfile> {
               fontSize: 18, fontWeight: FontWeight.bold, color: greyTextColor),
         ),
       ),
-
     );
   }
 
@@ -75,7 +152,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-
   Widget buildBody() {
     return Padding(
       padding: EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 5),
@@ -92,6 +168,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
   Widget buildProfileImage() {
     return Center(
       child: Container(
@@ -106,12 +183,16 @@ class _EditProfileState extends State<EditProfile> {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image:
+                  image: (_imageFile != null)
+                      ? DecorationImage(
+                          image: FileImage(_imageFile),
+                        )
+                      : NetworkImage(widget.imgUrl),
                   // image: (profile != null && profile.image != null && profile.image.isNotEmpty)?
                   // NetworkImage(
                   //   profile.image,
                   // ):
-                  AssetImage('assets/ben.png'),
+                  // AssetImage('assets/ben.png'),
                 ),
               ),
             ),
@@ -122,8 +203,9 @@ class _EditProfileState extends State<EditProfile> {
               child: Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     print("Edit image pressed");
+                    await getImage();
                     //pickImage();
                   },
                   child: Container(
@@ -137,8 +219,7 @@ class _EditProfileState extends State<EditProfile> {
                           bottom: BorderSide(color: Colors.white, width: 3),
                           left: BorderSide(color: Colors.white, width: 3),
                           right: BorderSide(color: Colors.white, width: 3),
-                        )
-                    ),
+                        )),
                     child: Icon(
                       Icons.edit,
                       color: Colors.white,
@@ -153,13 +234,15 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
   Widget buildTitle() {
     return Center(
       child: Padding(
         padding: EdgeInsets.only(top: 1),
         child: Text(
           "Edit Profile",
-          style: TextStyle(fontSize: 16, color: greyTextColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 16, color: greyTextColor, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -175,24 +258,30 @@ class _EditProfileState extends State<EditProfile> {
             buildNameField(),
             buildUsernameField(),
             buildOccupationField(),
-             //buildHeightDropdown(),
+            //buildHeightDropdown(),
             // buildDobPicker(),
             // buildLocation(),
-             buildAboutField(),
-             buildGenderRadio(),
+            buildAboutField(),
+            buildGenderRadio(),
             buildSexualPreferenceRadio(),
             // buildStatusRadio(),
-             buildInterestList(),
-             buildSaveBtn(),
+            buildInterestList(),
+            isLoading
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: CircularProgressIndicator(),
+                  )
+                : buildSaveBtn(),
           ],
         ),
       ),
     );
   }
+
   Widget buildNameField() {
     return TextFormField(
-      // controller: _nameEditingController,
-      // focusNode: _nameFocusNode,
+      controller: _nameEditingController,
+      focusNode: _nameFocusNode,
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
       validator: (value) {
@@ -202,9 +291,9 @@ class _EditProfileState extends State<EditProfile> {
           return null;
         }
       },
-      // onFieldSubmitted: (v) {
-      //   FocusScope.of(context).requestFocus(_usernameFocusNode);
-      // },
+      onFieldSubmitted: (v) {
+        FocusScope.of(context).requestFocus(_usernameFocusNode);
+      },
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
           border: UnderlineInputBorder(
@@ -217,27 +306,29 @@ class _EditProfileState extends State<EditProfile> {
           ),
           labelText: "Name",
           hintText: "Name",
-          labelStyle: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)),
+          labelStyle:
+              TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)),
     );
   }
+
   Widget buildUsernameField() {
     return Padding(
       padding: EdgeInsets.only(top: 0),
       child: TextFormField(
-        // controller: _usernameEditingController,
-        // focusNode: _usernameFocusNode,
+        controller: _usernameEditingController,
+        focusNode: _usernameFocusNode,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         validator: (value) {
           if (value.isEmpty) {
             return "Username cannot be empty";
-          }else {
+          } else {
             return null;
           }
         },
-        // onFieldSubmitted: (v) {
-        //   FocusScope.of(context).requestFocus(_occupationFocusNode);
-        // },
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(_occupationFocusNode);
+        },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
             border: UnderlineInputBorder(
@@ -250,30 +341,31 @@ class _EditProfileState extends State<EditProfile> {
             ),
             labelText: "Username",
             hintText: "Username",
-            labelStyle: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)
-        ),
+            labelStyle:
+                TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)),
       ),
     );
   }
+
   // Ocuupation field
   Widget buildOccupationField() {
     return Padding(
       padding: EdgeInsets.only(top: 0),
       child: TextFormField(
-        // controller: _occupationEditingController,
-        // focusNode: _occupationFocusNode,
+        controller: _occupationEditingController,
+        focusNode: _occupationFocusNode,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
         validator: (value) {
           if (value.isEmpty) {
             return "Occupation cannot be empty";
-          }else {
+          } else {
             return null;
           }
         },
-        // onFieldSubmitted: (v) {
-        //   FocusScope.of(context).requestFocus(_aboutFocusNode);
-        // },
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(_aboutFocusNode);
+        },
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
             border: UnderlineInputBorder(
@@ -286,8 +378,8 @@ class _EditProfileState extends State<EditProfile> {
             ),
             labelText: "Occupation",
             hintText: "Occupation",
-            labelStyle: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)
-        ),
+            labelStyle:
+                TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -296,14 +388,14 @@ class _EditProfileState extends State<EditProfile> {
     return Padding(
       padding: EdgeInsets.only(top: 0),
       child: TextFormField(
-        // controller: _aboutEditingController,
-        // focusNode: _aboutFocusNode,
+        controller: _aboutEditingController,
+        focusNode: _aboutFocusNode,
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.text,
         validator: (value) {
           if (value.isEmpty) {
             return "About cannot cannot be empty";
-          }else {
+          } else {
             return null;
           }
         },
@@ -319,8 +411,8 @@ class _EditProfileState extends State<EditProfile> {
             ),
             labelText: "About",
             hintText: "About",
-            labelStyle: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)
-        ),
+            labelStyle:
+                TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -337,7 +429,9 @@ class _EditProfileState extends State<EditProfile> {
             style: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold),
           ),
           // margin
-          SizedBox(height: 1,),
+          SizedBox(
+            height: 1,
+          ),
           // radios with title
           Row(
             children: [
@@ -346,11 +440,12 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Radio(
                     groupValue: genderGroupValue,
-                    value: maleValue,
+                    value: "Male",
                     activeColor: deepOrange,
                     onChanged: (value) {
                       setState(() {
                         genderGroupValue = value;
+                        print("$genderGroupValue");
                       });
                     },
                   ),
@@ -361,18 +456,21 @@ class _EditProfileState extends State<EditProfile> {
               ),
 
               // margin
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
 
               // Female
               Row(
                 children: [
                   Radio(
                     groupValue: genderGroupValue,
-                    value: femaleValue,
+                    value: "Female",
                     activeColor: deepOrange,
                     onChanged: (value) {
                       setState(() {
                         genderGroupValue = value;
+                        print("$genderGroupValue");
                       });
                     },
                   ),
@@ -383,18 +481,21 @@ class _EditProfileState extends State<EditProfile> {
               ),
 
               // margin
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
 
               // Female
               Row(
                 children: [
                   Radio(
                     groupValue: genderGroupValue,
-                    value: nonBinaryValue,
+                    value: "Non Binary",
                     activeColor: deepOrange,
                     onChanged: (value) {
                       setState(() {
                         genderGroupValue = value;
+                        print("$genderGroupValue");
                       });
                     },
                   ),
@@ -409,6 +510,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
   // build Sexual prefrence radio
   Widget buildSexualPreferenceRadio() {
     return Padding(
@@ -422,7 +524,9 @@ class _EditProfileState extends State<EditProfile> {
             style: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold),
           ),
           // margin
-          SizedBox(height: 0,),
+          SizedBox(
+            height: 0,
+          ),
           // radios with title
           Row(
             children: [
@@ -431,7 +535,7 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Radio(
                     groupValue: sexualPreferenceGroupValue,
-                    value: straightValue,
+                    value: "Straigh",
                     activeColor: deepOrange,
                     onChanged: (value) {
                       setState(() {
@@ -446,14 +550,16 @@ class _EditProfileState extends State<EditProfile> {
               ),
 
               // margin
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
 
               // gay value
               Row(
                 children: [
                   Radio(
                     groupValue: sexualPreferenceGroupValue,
-                    value: gayValue,
+                    value: "Gay",
                     activeColor: deepOrange,
                     onChanged: (value) {
                       setState(() {
@@ -468,14 +574,16 @@ class _EditProfileState extends State<EditProfile> {
               ),
 
               // margin
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
 
               // bi value
               Row(
                 children: [
                   Radio(
                     groupValue: sexualPreferenceGroupValue,
-                    value: biValue,
+                    value: "Bi",
                     activeColor: deepOrange,
                     onChanged: (value) {
                       setState(() {
@@ -495,7 +603,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-
   // build interest list
   Widget buildInterestList() {
     return Padding(
@@ -507,19 +614,25 @@ class _EditProfileState extends State<EditProfile> {
             // title
             Text(
               "Interests",
-              style: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: greyTextColor, fontWeight: FontWeight.bold),
             ),
             // margin
-            SizedBox(height: 4,),
+            SizedBox(
+              height: 4,
+            ),
             Container(
               height: 36,
               child: ListView.builder(
-                itemCount: interestList.length,
+                itemCount: _interests.length + 1,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return
-                    //buildInterestListAddItem(context, index);
-                     buildInterestItem(context, index);
+                  //buildInterestListAddItem(context, index);
+                  if (index == 0) {
+                    return buildInterestListAddItem(context, index);
+                  } else {
+                    return buildInterestItem(context, index - 1);
+                  }
                 },
               ),
             )
@@ -561,9 +674,11 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
             // margin
-            SizedBox(width: 4,),
+            SizedBox(
+              width: 4,
+            ),
             Text(
-              interestList[index].interest,
+              _interests[index],
               style: TextStyle(color: deepOrange),
             ),
           ],
@@ -574,19 +689,16 @@ class _EditProfileState extends State<EditProfile> {
 
   // interest list add item
   Widget buildInterestListAddItem(BuildContext context, int index) {
-    return Padding(
-      padding: EdgeInsets.only(left: 8),
-      child: Container(
-        child: IconButton(
-          onPressed: () {
-            print("add interest pressed");
-            showDialog(context: context, builder:(_) => showAddInterestDialog());
-          },
-          icon: Icon(
-            Icons.add,
-            color: deepOrange,
-            size: 16,
-          ),
+    return Container(
+      child: IconButton(
+        onPressed: () {
+          print("add interest pressed");
+          showDialog(context: context, builder: (_) => showAddInterestDialog());
+        },
+        icon: Icon(
+          Icons.add,
+          color: deepOrange,
+          size: 16,
         ),
       ),
     );
@@ -600,13 +712,14 @@ class _EditProfileState extends State<EditProfile> {
         height: 180.0,
         width: 300.0,
         padding: EdgeInsets.all(16.0),
-        child:Center(
+        child: Center(
           child: Column(
             children: [
               Expanded(
                 child: Text(
                   "Add Interest",
-                  style: TextStyle(fontSize: 20.0, color: greyTextColor, fontFamily: 'Lato'),
+                  style: TextStyle(
+                      fontSize: 20.0, color: greyTextColor, fontFamily: 'Lato'),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -614,23 +727,25 @@ class _EditProfileState extends State<EditProfile> {
               Padding(
                 padding: EdgeInsets.only(top: 16, bottom: 16),
                 child: TextFormField(
-                  //controller: _interestEditingController,
+                  controller: _interestEditingController,
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 1.0),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange, width: 2.0),
+                        borderSide:
+                            BorderSide(color: Colors.orange, width: 2.0),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       labelText: "Interest",
-                      hintText: "Interest",
-                      labelStyle: TextStyle(color: greyTextColor, fontWeight: FontWeight.bold)
-                  ),
+                      hintText: "e.g. Nature",
+                      labelStyle: TextStyle(
+                          color: greyTextColor, fontWeight: FontWeight.bold)),
                 ),
               ),
 
@@ -640,19 +755,18 @@ class _EditProfileState extends State<EditProfile> {
                 height: 40.0,
                 child: MaterialButton(
                   onPressed: () {
-                    // if (_interestEditingController.text.isEmpty) {
-                    //   showToast("Interest cannot be empty");
-                    // }else {
-                    //   interestList.remove(null);
-                    //   setState(() {
-                    //     interestList.add(Interest(
-                    //         interest: _interestEditingController.text
-                    //             .toString()));
-                    //     interestList.add(null);
-                    //     _interestEditingController.clear();
-                    //   });
-                    //   Navigator.pop(context);
-                    // }
+                    if (_interestEditingController.text.isEmpty) {
+                      Get.snackbar("Error", "Interest cannot be empty");
+                    } else {
+                      // _interests.remove(null);
+                      setState(() {
+                        _interests
+                            .add(_interestEditingController.text.toString());
+                        // interestList.add(null);
+                        _interestEditingController.clear();
+                      });
+                      Navigator.pop(context);
+                    }
                   },
                   color: deepOrange,
                   shape: RoundedRectangleBorder(
@@ -679,15 +793,40 @@ class _EditProfileState extends State<EditProfile> {
         width: 100,
         height: 36.0,
         child: MaterialButton(
-          onPressed: () {
-            // if (_formKey.currentState.validate()) {
-            //   /*if (profile.latitude != null && profile.longitude != null) {
-            //     update();
-            //   }else {
-            //     showSnackbar("Please select location");
-            //   }*/
-            //   update();
-            // }
+          onPressed: () async {
+            if (_nameEditingController.text.isEmpty ||
+                _usernameEditingController.text.isEmpty ||
+                _occupationEditingController.text.isEmpty ||
+                _aboutEditingController.text.isEmpty) {
+              Get.snackbar('Error', "No Field can be left Empty");
+            } else {
+              try {
+                setState(() {
+                  isLoading = true;
+                });
+                await DatabaseService(uid: widget.userId).modifyUserData(
+                    name: _nameEditingController.text,
+                    username: _usernameEditingController.text,
+                    occupation: _occupationEditingController.text,
+                    about: _aboutEditingController.text,
+                    interests: _interests,
+                    gender: genderGroupValue,
+                    sexualpreference: sexualPreferenceGroupValue
+
+                    // location: locationController.text
+                    );
+                Get.snackbar("Success", "Updated User Data");
+                setState(() {
+                  isLoading = false;
+                });
+                // Navigator.pop(context);
+              } catch (e) {
+                setState(() {
+                  isLoading = false;
+                });
+                print("ERROR in updating data : $e");
+              }
+            }
           },
           color: Colors.orange,
           elevation: 0,
@@ -696,12 +835,11 @@ class _EditProfileState extends State<EditProfile> {
           ),
           child: Text(
             "Save",
-            style: TextStyle(fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
+            style: TextStyle(
+                fontSize: 16.0, color: Colors.white, fontFamily: 'Lato'),
           ),
         ),
       ),
     );
   }
-
-
 }

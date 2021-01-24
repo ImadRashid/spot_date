@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,7 +21,6 @@ class CreateSpotzonePage extends StatefulWidget {
 }
 
 class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _formKey = GlobalKey<FormState>();
@@ -74,7 +72,8 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
       title: Center(
         child: Text(
           "Create a Spotzone",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: greyTextColor),
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: greyTextColor),
         ),
       ),
     );
@@ -83,9 +82,9 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
   Widget buildBody() {
     return buildBodyContents();
 
-      //buildBodyMyContent();
+    //buildBodyMyContent();
 
-      //
+    //
   }
 
   // Widget buildBodyMyContent()
@@ -145,7 +144,9 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                 buildTitle(),
                 buildDateTypes(),
                 buildLocation(),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -153,15 +154,25 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                     buildSelectTime(),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 buildLokkingFor(),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 buildMaleSwitch(),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 buildFemaleSwitch(),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 buildAgeSlider(),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 buildCreateBtn(),
               ],
             ),
@@ -180,9 +191,12 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
         children: [
           Text(
             "Title",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           TextFormField(
             controller: _titleController,
             textInputAction: TextInputAction.done,
@@ -190,7 +204,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
             validator: (value) {
               if (value.isEmpty) {
                 return "Description cannot cannot be empty";
-              }else {
+              } else {
                 return null;
               }
             },
@@ -205,8 +219,9 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                 borderRadius: BorderRadius.circular(4),
               ),
               hintText: "Enter spot zone title",
-              hintStyle: TextStyle(color: greyTextColor,),
-
+              hintStyle: TextStyle(
+                color: greyTextColor,
+              ),
             ),
             maxLength: 100,
             buildCounter: (context, {currentLength, isFocused, maxLength}) {
@@ -229,9 +244,12 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
         children: [
           Text(
             "Date Types",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               DateType(
@@ -240,7 +258,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -257,7 +275,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -273,7 +291,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -285,7 +303,9 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               DateType(
@@ -294,7 +314,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -310,7 +330,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
                     setState(() {
                       selectedDateTypes.remove(value);
                     });
-                  }else {
+                  } else {
                     setState(() {
                       selectedDateTypes.add(value);
                     });
@@ -357,16 +377,20 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
         children: [
           Text(
             "Location",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           InkWell(
-            onTap: ()
-            {
-              Navigator.push(context, MaterialPageRoute(builder:(context)=>GoogleMapScreen(
+            onTap: () {},
+            // ()
+            // {
+            //   Navigator.push(context, MaterialPageRoute(builder:(context)=>GoogleMapScreen(
 
-              )));
-            },
+            //   )));
+            // },
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -385,7 +409,9 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
               ),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Center(
             child: InkWell(
               onTap: () {
@@ -394,7 +420,8 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
               },
               child: Text(
                 "Choose from map",
-                style: TextStyle(fontWeight: FontWeight.bold, color: orangeColor),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: orangeColor),
               ),
             ),
           ),
@@ -418,9 +445,14 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
           children: [
             Text(
               "Time",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               width: 150,
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -470,9 +502,14 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
           children: [
             Text(
               "Date",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               width: 150,
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -509,10 +546,11 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
 
   Widget buildLokkingFor() {
     return // i'm looking for text
-      Text(
-        "I'm looking for",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
-      );
+        Text(
+      "I'm looking for",
+      style: TextStyle(
+          fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+    );
   }
 
   // build male switch
@@ -573,17 +611,15 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
             // Age text
             Text(
               "Age",
-              style: TextStyle(fontSize: 16,
+              style: TextStyle(
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey),
             ),
 
-            Text(
-                "${minAge.round()} - ${maxAge.round()}"
-            ),
+            Text("${minAge.round()} - ${maxAge.round()}"),
           ],
         ),
-
         FlutterSlider(
           values: [minAge, maxAge],
           max: 100,
@@ -592,12 +628,8 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
           handlerHeight: 20,
           handlerWidth: 20,
           trackBar: FlutterSliderTrackBar(
-            activeTrackBar: BoxDecoration(
-                color: orangeColor
-            ),
-            inactiveTrackBar: BoxDecoration(
-                color: greyTextColor
-            ),
+            activeTrackBar: BoxDecoration(color: orangeColor),
+            inactiveTrackBar: BoxDecoration(color: greyTextColor),
           ),
           onDragging: (handlerIndex, lowerValue, upperValue) {
             setState(() {
@@ -607,16 +639,12 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
             });
           },
           handler: FlutterSliderHandler(
-            foregroundDecoration: BoxDecoration(
-                color: orangeColor,
-                shape: BoxShape.circle
-            ),
+            foregroundDecoration:
+                BoxDecoration(color: orangeColor, shape: BoxShape.circle),
           ),
           rightHandler: FlutterSliderHandler(
-            foregroundDecoration: BoxDecoration(
-                color: orangeColor,
-                shape: BoxShape.circle
-            ),
+            foregroundDecoration:
+                BoxDecoration(color: orangeColor, shape: BoxShape.circle),
           ),
         ),
       ],
@@ -659,28 +687,30 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
       child: Padding(
         padding: EdgeInsets.only(top: 20),
         child: MaterialButton(
-          onPressed: isCreateBtnEnabled? () {
-            if (validate()) {
-              Spotzone spotzone = Spotzone();
-              spotzone.title = _titleController.text.toString();
-              spotzone.date = "$selectedDate 00:00:00";
-              spotzone.time = "2020-1-1 $selectedTime:00";
-              spotzone.resturantId = selectedResturant.id;
-              spotzone.male = male;
-              spotzone.female = female;
-              spotzone.minAge = minAge.round();
-              spotzone.maxAge = maxAge.round();
-              for(int i=0; i < selectedDateTypes.length; i++) {
-                SpotDateType dt = SpotDateType();
-                dt.type = selectedDateTypes[i];
-                spotzone.dateTypes.add(dt);
-              }
-              setState(() {
-                isCreateBtnEnabled = false;
-              });
-              //createSpotzone(spotzone);
-            }
-          } : null,
+          onPressed: isCreateBtnEnabled
+              ? () {
+                  if (validate()) {
+                    Spotzone spotzone = Spotzone();
+                    spotzone.title = _titleController.text.toString();
+                    spotzone.date = "$selectedDate 00:00:00";
+                    spotzone.time = "2020-1-1 $selectedTime:00";
+                    spotzone.resturantId = selectedResturant.id;
+                    spotzone.male = male;
+                    spotzone.female = female;
+                    spotzone.minAge = minAge.round();
+                    spotzone.maxAge = maxAge.round();
+                    for (int i = 0; i < selectedDateTypes.length; i++) {
+                      SpotDateType dt = SpotDateType();
+                      dt.type = selectedDateTypes[i];
+                      spotzone.dateTypes.add(dt);
+                    }
+                    setState(() {
+                      isCreateBtnEnabled = false;
+                    });
+                    //createSpotzone(spotzone);
+                  }
+                }
+              : null,
           color: orangeColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -688,7 +718,11 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
           ),
           child: Text(
             "Create",
-            style: TextStyle(fontSize: 14.0, color: Colors.white, fontFamily: 'Lato', fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.white,
+                fontFamily: 'Lato',
+                fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -721,17 +755,18 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
 
     if (errorText.isEmpty) {
       return true;
-    }else {
+    } else {
       showSnackbar(errorText);
       return false;
     }
   }
 
-
   // show snackbar
   void showSnackbar(String message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message),)));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _scaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text(message),
+            )));
   }
 
   // void createSpotzone(Spotzone spotzone) {
@@ -758,8 +793,7 @@ class _CreateSpotzonePageState extends State<CreateSpotzonePage> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 
   // navigate to SelectResturantPage

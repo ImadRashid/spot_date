@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 // import 'package:spot/models/user.dart';
 // import 'package:spot/network/api/spot_apis.dart';
-import 'package:spotadate/screens/login_page.dart';
+import 'package:spotadate/screens/authentication/login_page.dart';
 import 'package:spotadate/utils/colors.dart';
 
 class UpdatePasswordPage extends StatefulWidget {
@@ -432,11 +432,9 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
   //   });
   // }
 
-  void navigateToLoginPage()
-  {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => LoginPage()));
-
+  void navigateToLoginPage() {
+    // Navigator.of(context).push(
+    //     MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   void showSnackbar(String message) {

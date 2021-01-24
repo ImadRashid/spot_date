@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "509055433189",
+    "firebase_url": "https://fir-ocr-71c33.firebaseio.com",
+    "project_id": "fir-ocr-71c33",
+    "storage_bucket": "fir-ocr-71c33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509055433189:android:4079f590502bf8584b970c",
+        "android_client_info": {
+          "package_name": "com.example.spotadate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509055433189-kh4r4754nio61evvvmptaut8a0ihfvrj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcK7M7bXfF7KC9pgj3Alk24zYq5eYeJao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509055433189-kh4r4754nio61evvvmptaut8a0ihfvrj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
